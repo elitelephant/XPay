@@ -147,33 +147,33 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-sm sm:max-w-md mx-auto my-auto">
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Wallet className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="w-full max-w-sm sm:max-w-md mx-auto">
+        <div className="text-center mb-4 sm:mb-6">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+            <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">{checkoutData.merchantName}</h1>
-          <p className="text-slate-600 text-sm sm:text-base mt-1">{checkoutData.description}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{checkoutData.merchantName}</h1>
+          <p className="text-slate-600 text-sm mt-1">{checkoutData.description}</p>
         </div>
 
-        <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-          <CardContent className="pt-6 pb-6">
+        <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardContent className="pt-4 pb-4">
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">${checkoutData.amount}</div>
-              <p className="text-slate-600 text-sm sm:text-base">Amount to pay</p>
+              <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">${checkoutData.amount}</div>
+              <p className="text-slate-600 text-sm">Amount to pay</p>
             </div>
           </CardContent>
         </Card>
 
         {!walletConnected ? (
-          <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-amber-500" />
+          <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-500" />
                 Connect Wallet
               </CardTitle>
-              <CardDescription className="text-sm sm:text-base">
+              <CardDescription className="text-sm">
                 Connect your Stellar wallet to proceed with the payment
               </CardDescription>
             </CardHeader>
@@ -181,7 +181,7 @@ export default function CheckoutPage() {
               <Button
                 onClick={handleConnectWallet}
                 disabled={isConnecting}
-                className="w-full h-12 sm:h-14 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-sm sm:text-base font-medium"
+                className="w-full h-10 sm:h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-sm font-medium"
               >
                 {isConnecting ? (
                   <div className="flex items-center gap-2">
@@ -199,8 +199,8 @@ export default function CheckoutPage() {
           </Card>
         ) : (
           <>
-            <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-green-50 border-green-200">
-              <CardContent className="pt-4">
+            <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-green-50 border-green-200">
+              <CardContent className="pt-3 pb-3">
                 <div className="flex items-center gap-2 text-green-800">
                   <CheckCircle className="w-4 h-4" />
                   <span className="text-sm font-medium">Wallet Connected</span>
@@ -211,12 +211,12 @@ export default function CheckoutPage() {
               </CardContent>
             </Card>
 
-            <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg sm:text-xl">Select token</CardTitle>
-                <CardDescription className="text-sm sm:text-base">Choose which asset to pay with</CardDescription>
+            <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Select token</CardTitle>
+                <CardDescription className="text-sm">Choose which asset to pay with</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3">
                 <Select value={selectedToken} onValueChange={setSelectedToken} disabled={paymentStatus !== "idle"}>
                   <SelectTrigger>
                     <SelectValue />
@@ -228,10 +228,10 @@ export default function CheckoutPage() {
                   </SelectContent>
                 </Select>
 
-                <div className="p-3 sm:p-4 bg-slate-50 rounded-lg">
+                <div className="p-3 bg-slate-50 rounded-lg">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm sm:text-base text-slate-600">Amount to pay:</span>
-                    <span className="font-mono font-medium text-sm sm:text-base">
+                    <span className="text-sm text-slate-600">Amount to pay:</span>
+                    <span className="font-mono font-medium text-sm">
                       {calculateAmount()} {selectedToken}
                     </span>
                   </div>
@@ -239,17 +239,17 @@ export default function CheckoutPage() {
               </CardContent>
             </Card>
 
-            <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardContent className="pt-6 pb-6">
-                <div className="flex items-center justify-center gap-3 mb-4">
+            <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardContent className="pt-4 pb-4">
+                <div className="flex items-center justify-center gap-3 mb-3">
                   {getStatusIcon()}
-                  <span className="font-medium text-slate-900 text-sm sm:text-base">{getStatusText()}</span>
+                  <span className="font-medium text-slate-900 text-sm">{getStatusText()}</span>
                 </div>
 
                 {paymentStatus !== "idle" && paymentStatus !== "completed" && (
-                  <div className="w-full bg-slate-200 rounded-full h-2 sm:h-3">
+                  <div className="w-full bg-slate-200 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 sm:h-3 rounded-full transition-all duration-1000"
+                      className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full transition-all duration-1000"
                       style={{
                         width: paymentStatus === "waiting" ? "33%" : paymentStatus === "processing" ? "66%" : "100%",
                       }}
@@ -260,11 +260,11 @@ export default function CheckoutPage() {
             </Card>
 
             {paymentStatus === "idle" && (
-              <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-                <CardContent className="pt-6">
+              <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardContent className="pt-4">
                   <Button
                     onClick={handlePayment}
-                    className="w-full h-12 sm:h-14 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-sm sm:text-base font-medium"
+                    className="w-full h-10 sm:h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-sm font-medium"
                   >
                     <Wallet className="w-4 h-4 mr-2" />
                     Pay with Wallet
@@ -275,11 +275,11 @@ export default function CheckoutPage() {
 
             {paymentStatus === "completed" && (
               <Card className="border-green-200 bg-green-50 shadow-lg backdrop-blur-sm">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-lg sm:text-xl font-semibold text-green-800 mb-2">Payment Successful!</h3>
-                  <p className="text-green-700 mb-4 text-sm sm:text-base">Your payment has been processed successfully.</p>
-                  <Badge className="bg-green-100 text-green-800 border-green-200 text-sm sm:text-base px-3 py-1">
+                <CardContent className="pt-4 pb-4 text-center">
+                  <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-green-500 mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold text-green-800 mb-2">Payment Successful!</h3>
+                  <p className="text-green-700 mb-3 text-sm">Your payment has been processed successfully.</p>
+                  <Badge className="bg-green-100 text-green-800 border-green-200 text-sm px-3 py-1">
                     Transaction completed
                   </Badge>
                 </CardContent>
@@ -288,7 +288,7 @@ export default function CheckoutPage() {
           </>
         )}
 
-        <div className="text-center mt-6 sm:mt-8 text-xs sm:text-sm text-slate-500 space-y-1">
+        <div className="text-center mt-4 sm:mt-6 text-xs text-slate-500 space-y-1">
           <p>Powered by XPay</p>
           <p>Secure payments on Stellar network</p>
         </div>
