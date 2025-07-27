@@ -121,32 +121,32 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 p-4">
-      <div className="max-w-md mx-auto pt-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full max-w-sm sm:max-w-md mx-auto my-auto">
         {/* Header */}
-        <div className="text-center mb-6">
-          <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Wallet className="w-6 h-6 text-white" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <Wallet className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">{checkoutData.merchantName}</h1>
-          <p className="text-slate-600">{checkoutData.description}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">{checkoutData.merchantName}</h1>
+          <p className="text-slate-600 text-sm sm:text-base mt-1">{checkoutData.description}</p>
         </div>
 
         {/* Payment Amount */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
+        <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardContent className="pt-6 pb-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900 mb-2">${checkoutData.amount}</div>
-              <p className="text-slate-600">Monto a pagar</p>
+              <div className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">${checkoutData.amount}</div>
+              <p className="text-slate-600 text-sm sm:text-base">Monto a pagar</p>
             </div>
           </CardContent>
         </Card>
 
         {/* Token Selection */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-lg">Selecciona tu token</CardTitle>
-            <CardDescription>Elige con qué activo quieres pagar</CardDescription>
+        <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg sm:text-xl">Selecciona tu token</CardTitle>
+            <CardDescription className="text-sm sm:text-base">Elige con qué activo quieres pagar</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Select value={selectedToken} onValueChange={setSelectedToken} disabled={paymentStatus !== "idle"}>
@@ -160,10 +160,10 @@ export default function CheckoutPage() {
               </SelectContent>
             </Select>
 
-            <div className="p-3 bg-slate-50 rounded-lg">
+            <div className="p-3 sm:p-4 bg-slate-50 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-600">Cantidad a pagar:</span>
-                <span className="font-mono font-medium">
+                <span className="text-sm sm:text-base text-slate-600">Cantidad a pagar:</span>
+                <span className="font-mono font-medium text-sm sm:text-base">
                   {calculateAmount()} {selectedToken}
                 </span>
               </div>
@@ -172,17 +172,17 @@ export default function CheckoutPage() {
         </Card>
 
         {/* Payment Status */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
+        <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardContent className="pt-6 pb-6">
             <div className="flex items-center justify-center gap-3 mb-4">
               {getStatusIcon()}
-              <span className="font-medium text-slate-900">{getStatusText()}</span>
+              <span className="font-medium text-slate-900 text-sm sm:text-base">{getStatusText()}</span>
             </div>
 
             {paymentStatus !== "idle" && paymentStatus !== "completed" && (
-              <div className="w-full bg-slate-200 rounded-full h-2">
+              <div className="w-full bg-slate-200 rounded-full h-2 sm:h-3">
                 <div
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full transition-all duration-1000"
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 sm:h-3 rounded-full transition-all duration-1000"
                   style={{
                     width: paymentStatus === "waiting" ? "33%" : paymentStatus === "processing" ? "66%" : "100%",
                   }}
@@ -195,29 +195,29 @@ export default function CheckoutPage() {
         {paymentStatus === "idle" && (
           <>
             {/* Payment Methods */}
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Métodos de pago</CardTitle>
+            <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg sm:text-xl">Métodos de pago</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
                   variant="outline"
-                  className="w-full justify-start h-12 bg-transparent"
+                  className="w-full justify-start h-12 sm:h-14 bg-transparent hover:bg-slate-50 text-sm sm:text-base"
                   onClick={() => openWallet("freighter")}
                 >
-                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
-                    <Wallet className="w-4 h-4 text-orange-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+                    <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
                   </div>
                   Pagar con Freighter
                 </Button>
 
                 <Button
                   variant="outline"
-                  className="w-full justify-start h-12 bg-transparent"
+                  className="w-full justify-start h-12 sm:h-14 bg-transparent hover:bg-slate-50 text-sm sm:text-base"
                   onClick={() => openWallet("albedo")}
                 >
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                    <Wallet className="w-4 h-4 text-blue-600" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                    <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
                   Pagar con Albedo
                 </Button>
@@ -225,37 +225,37 @@ export default function CheckoutPage() {
             </Card>
 
             {/* Manual Payment */}
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Pago Manual</CardTitle>
-                <CardDescription>Copia los datos y realiza el pago desde tu wallet</CardDescription>
+            <Card className="mb-4 sm:mb-6 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg sm:text-xl">Pago Manual</CardTitle>
+                <CardDescription className="text-sm sm:text-base">Copia los datos y realiza el pago desde tu wallet</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium text-slate-700">Dirección de destino</label>
                   <div className="flex items-center gap-2 mt-1">
-                    <code className="flex-1 p-2 bg-slate-100 rounded text-xs font-mono break-all">
+                    <code className="flex-1 p-2 sm:p-3 bg-slate-100 rounded text-xs sm:text-sm font-mono break-all">
                       {stellarAddress}
                     </code>
-                    <Button variant="outline" size="icon" onClick={copyAddress}>
+                    <Button variant="outline" size="icon" onClick={copyAddress} className="shrink-0">
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-slate-700">Cantidad</label>
-                    <div className="mt-1 p-2 bg-slate-100 rounded text-sm font-mono">
+                    <div className="mt-1 p-2 sm:p-3 bg-slate-100 rounded text-sm font-mono text-center sm:text-left">
                       {calculateAmount()} {selectedToken}
                     </div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-slate-700">Memo</label>
                     <div className="flex items-center gap-1 mt-1">
-                      <code className="flex-1 p-2 bg-slate-100 rounded text-xs font-mono">{paymentMemo}</code>
-                      <Button variant="outline" size="icon" onClick={copyMemo}>
-                        <Copy className="w-3 h-3" />
+                      <code className="flex-1 p-2 sm:p-3 bg-slate-100 rounded text-xs sm:text-sm font-mono">{paymentMemo}</code>
+                      <Button variant="outline" size="icon" onClick={copyMemo} className="shrink-0">
+                        <Copy className="w-3 h-3 sm:w-4 sm:h-4" />
                       </Button>
                     </div>
                   </div>
@@ -265,7 +265,7 @@ export default function CheckoutPage() {
 
                 <Button
                   onClick={handlePayment}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+                  className="w-full h-12 sm:h-14 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-sm sm:text-base font-medium"
                 >
                   Simular Pago Recibido
                 </Button>
@@ -275,18 +275,18 @@ export default function CheckoutPage() {
         )}
 
         {paymentStatus === "completed" && (
-          <Card className="border-green-200 bg-green-50">
-            <CardContent className="pt-6 text-center">
-              <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-green-800 mb-2">¡Pago Exitoso!</h3>
-              <p className="text-green-700 mb-4">Tu pago ha sido procesado correctamente.</p>
-              <Badge className="bg-green-100 text-green-800 border-green-200">Transacción completada</Badge>
+          <Card className="border-green-200 bg-green-50 shadow-lg backdrop-blur-sm">
+            <CardContent className="pt-6 pb-6 text-center">
+              <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 text-green-500 mx-auto mb-4" />
+              <h3 className="text-lg sm:text-xl font-semibold text-green-800 mb-2">¡Pago Exitoso!</h3>
+              <p className="text-green-700 mb-4 text-sm sm:text-base">Tu pago ha sido procesado correctamente.</p>
+              <Badge className="bg-green-100 text-green-800 border-green-200 text-sm sm:text-base px-3 py-1">Transacción completada</Badge>
             </CardContent>
           </Card>
         )}
 
         {/* Footer */}
-        <div className="text-center mt-8 text-sm text-slate-500">
+        <div className="text-center mt-6 sm:mt-8 text-xs sm:text-sm text-slate-500 space-y-1">
           <p>Powered by StellarPay</p>
           <p>Pagos seguros en la red Stellar</p>
         </div>

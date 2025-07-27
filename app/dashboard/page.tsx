@@ -107,16 +107,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-slate-600">Gestiona tus pagos cripto en Stellar</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
+          <p className="text-slate-600 text-sm sm:text-base">Gestiona tus pagos cripto en Stellar</p>
         </div>
         <Button
           onClick={simulatePayment}
-          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 h-10 sm:h-11 text-sm sm:text-base"
         >
           <Plus className="w-4 h-4 mr-2" />
           Simular Pago
@@ -124,15 +124,15 @@ export default function DashboardPage() {
       </div>
 
       {/* Balance Card */}
-      <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0">
+      <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 shadow-lg">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Wallet className="w-5 h-5" />
-              <CardTitle className="text-lg">Saldo Total</CardTitle>
+              <CardTitle className="text-lg sm:text-xl">Saldo Total</CardTitle>
             </div>
             <Select value={selectedToken} onValueChange={setSelectedToken}>
-              <SelectTrigger className="w-24 bg-white/20 border-white/30 text-white">
+              <SelectTrigger className="w-20 sm:w-24 bg-white/20 border-white/30 text-white text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -145,8 +145,8 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold">{balance.toFixed(2)}</span>
-            <span className="text-lg opacity-90">{selectedToken}</span>
+            <span className="text-2xl sm:text-3xl font-bold">{balance.toFixed(2)}</span>
+            <span className="text-lg sm:text-xl opacity-90">{selectedToken}</span>
           </div>
           <div className="flex items-center gap-1 mt-2 text-green-200">
             <TrendingUp className="w-4 h-4" />
@@ -156,34 +156,34 @@ export default function DashboardPage() {
       </Card>
 
       {/* Recent Payments */}
-      <Card>
+      <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Pagos Recientes</CardTitle>
-          <CardDescription>Últimas transacciones recibidas en tu comercio</CardDescription>
+          <CardTitle className="text-lg sm:text-xl">Pagos Recientes</CardTitle>
+          <CardDescription className="text-sm sm:text-base">Últimas transacciones recibidas en tu comercio</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {payments.map((payment) => (
               <div
                 key={payment.id}
-                className="flex items-center justify-between p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer gap-3 sm:gap-4"
                 onClick={() => router.push(`/payment/${payment.id}`)}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <div className="flex items-center gap-2">
                     {getStatusIcon(payment.status)}
                     <div>
-                      <p className="font-medium text-slate-900">
+                      <p className="font-medium text-slate-900 text-sm sm:text-base">
                         {payment.amount} {payment.token}
                       </p>
-                      <p className="text-sm text-slate-500">{payment.date}</p>
+                      <p className="text-xs sm:text-sm text-slate-500">{payment.date}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="text-sm text-slate-500 font-mono">{payment.hash}</p>
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                  <div className="text-left sm:text-right">
+                    <p className="text-xs sm:text-sm text-slate-500 font-mono break-all sm:break-normal">{payment.hash}</p>
                   </div>
                   {getStatusBadge(payment.status)}
                 </div>
