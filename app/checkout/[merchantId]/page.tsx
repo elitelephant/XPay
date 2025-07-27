@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle, Clock, Copy, AlertCircle, Loader2, LogOut } from "lucide-react"
+import { CheckCircle, Clock, Copy, AlertCircle, Loader2, LogOut, ArrowLeft } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import stellarWalletService from "@/lib/stellar-wallet"
 
@@ -25,6 +25,7 @@ export default function CheckoutPage() {
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "waiting" | "processing" | "completed">("idle")
   const [walletConnected, setWalletConnected] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
+  const [showPaymentScreen, setShowPaymentScreen] = useState(false)
   const [checkoutData] = useState<CheckoutData>({
     merchantName: "Demo Store",
     amount: 25.99,
@@ -75,6 +76,7 @@ export default function CheckoutPage() {
       await stellarWalletService.disconnectWallet()
       setWalletConnected(false)
       setPaymentStatus("idle")
+      setShowPaymentScreen(false)
       toast({
         title: "Wallet Disconnected",
         description: "Your wallet has been disconnected",
@@ -88,6 +90,11 @@ export default function CheckoutPage() {
     }
   }
 
+  const handleBackToCheckout = () => {
+    setShowPaymentScreen(false)
+    setPaymentStatus("idle")
+  }
+
   const handlePayment = async () => {
     if (!walletConnected) {
       toast({
@@ -98,28 +105,14 @@ export default function CheckoutPage() {
       return
     }
 
-    setPaymentStatus("waiting")
-
-    try {
-      setTimeout(() => {
-        setPaymentStatus("processing")
-      }, 2000)
-
-      setTimeout(() => {
-        setPaymentStatus("completed")
-        toast({
-          title: "Payment Successful",
-          description: "Your payment has been processed successfully",
-        })
-      }, 5000)
-    } catch (error) {
-      setPaymentStatus("idle")
-      toast({
-        title: "Payment Failed",
-        description: error instanceof Error ? error.message : "Payment failed",
-        variant: "destructive",
-      })
-    }
+    // Switch directly to payment success screen
+    setShowPaymentScreen(true)
+    setPaymentStatus("completed")
+    
+    toast({
+      title: "Payment Successful",
+      description: "Your payment has been processed successfully",
+    })
   }
 
   const copyAddress = () => {
@@ -162,6 +155,62 @@ export default function CheckoutPage() {
       default:
         return ""
     }
+  }
+
+  // Payment Processing Screen
+  if (showPaymentScreen) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 flex items-center justify-center p-3 sm:p-4">
+        <div className="w-full max-w-sm sm:max-w-md mx-auto">
+          <div className="text-center mb-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{checkoutData.merchantName}</h1>
+            <p className="text-slate-600 text-sm mt-1">Payment completed</p>
+          </div>
+
+          {/* Success Screen */}
+          <Card className="border-green-200 bg-green-50 shadow-lg backdrop-blur-sm">
+            <CardContent className="pt-6 pb-6 text-center">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-green-800 mb-3">Payment Successful!</h3>
+              <p className="text-green-700 mb-4">
+                Your payment of <span className="font-semibold">${checkoutData.amount}</span> has been processed successfully.
+              </p>
+              <Badge className="bg-green-100 text-green-800 border-green-200 px-4 py-2 text-sm">
+                Transaction completed
+              </Badge>
+              
+              {/* Payment details */}
+              <div className="mt-6 bg-white/50 rounded-lg p-4 text-left space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-green-700">Amount:</span>
+                  <span className="font-medium text-green-800">${checkoutData.amount} USD</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-green-700">Token:</span>
+                  <span className="font-medium text-green-800">{calculateAmount()} {selectedToken}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-green-700">Wallet:</span>
+                  <span className="font-mono text-xs text-green-800">{stellarWalletService.formatPublicKey()}</span>
+                </div>
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-green-200">
+                <p className="text-green-600 text-sm">
+                  You can close this window or will be redirected shortly.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Footer */}
+          <div className="text-center mt-6 text-xs text-slate-500 space-y-1">
+            <p>Powered by XPay</p>
+            <p>Secure payments on Stellar network</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -266,28 +315,6 @@ export default function CheckoutPage() {
               </CardContent>
             </Card>
 
-            {paymentStatus !== "idle" && (
-              <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-                <CardContent className="pt-4 pb-4">
-                  <div className="flex items-center justify-center gap-3 mb-3">
-                    {getStatusIcon()}
-                    <span className="font-medium text-slate-900 text-sm">{getStatusText()}</span>
-                  </div>
-
-                  {paymentStatus !== "completed" && (
-                    <div className="w-full bg-slate-200 rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-indigo-600 to-purple-600 h-2 rounded-full transition-all duration-1000"
-                        style={{
-                          width: paymentStatus === "waiting" ? "33%" : paymentStatus === "processing" ? "66%" : "100%",
-                        }}
-                      />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-
             {paymentStatus === "idle" && (
               <Card className="mb-3 sm:mb-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
                 <CardContent className="pt-4">
@@ -297,19 +324,6 @@ export default function CheckoutPage() {
                   >
                     Pay with Wallet
                   </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {paymentStatus === "completed" && (
-              <Card className="border-green-200 bg-green-50 shadow-lg backdrop-blur-sm">
-                <CardContent className="pt-4 pb-4 text-center">
-                  <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-green-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-semibold text-green-800 mb-2">Payment Successful!</h3>
-                  <p className="text-green-700 mb-3 text-sm">Your payment has been processed successfully.</p>
-                  <Badge className="bg-green-100 text-green-800 border-green-200 text-sm px-3 py-1">
-                    Transaction completed
-                  </Badge>
                 </CardContent>
               </Card>
             )}
