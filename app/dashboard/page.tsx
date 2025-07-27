@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Wallet, TrendingUp, Clock, CheckCircle, AlertCircle, Plus } from "lucide-react"
+import { Wallet, TrendingUp, Clock, CheckCircle, AlertCircle, Plus, LogOut, User } from "lucide-react"
 import { useRouter } from "next/navigation"
+import stellarWalletService from "@/lib/stellar-wallet"
+import { toast } from "sonner"
 
 interface Payment {
   id: string
@@ -20,6 +22,8 @@ interface Payment {
 export default function DashboardPage() {
   const [selectedToken, setSelectedToken] = useState("XLM")
   const [balance, setBalance] = useState(1250.75)
+  const [walletConnected, setWalletConnected] = useState(false)
+  const [walletPublicKey, setWalletPublicKey] = useState<string | null>(null)
   const [payments, setPayments] = useState<Payment[]>([
     {
       id: "1",
@@ -49,12 +53,35 @@ export default function DashboardPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication - support both old email auth and new wallet auth
     const isAuth = localStorage.getItem("isAuthenticated")
-    if (!isAuth) {
+    const isWalletConnected = localStorage.getItem("stellar_wallet_connected") === "true"
+    
+    if (!isAuth && !isWalletConnected) {
       router.push("/login")
+      return
+    }
+
+    // Set wallet connection state
+    if (isWalletConnected) {
+      setWalletConnected(true)
+      setWalletPublicKey(localStorage.getItem("stellar_public_key"))
     }
   }, [router])
+
+  const handleDisconnectWallet = async () => {
+    try {
+      await stellarWalletService.disconnectWallet()
+      
+      // Clear all auth states
+      localStorage.removeItem("isAuthenticated")
+      
+      toast.success("Wallet disconnected successfully")
+      router.push("/login")
+    } catch (error) {
+      toast.error("Failed to disconnect wallet")
+    }
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -122,6 +149,36 @@ export default function DashboardPage() {
           Simular Pago
         </Button>
       </div>
+
+      {/* Wallet Connection Status */}
+      {walletConnected && (
+        <Card className="bg-green-50 border-green-200 shadow-sm">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-green-900">Stellar Wallet Connected</p>
+                  <p className="text-sm text-green-700">
+                    {walletPublicKey ? stellarWalletService.formatPublicKey(walletPublicKey) : "Connected"}
+                  </p>
+                </div>
+              </div>
+              <Button
+                onClick={handleDisconnectWallet}
+                variant="outline"
+                size="sm"
+                className="border-green-300 text-green-700 hover:bg-green-100"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Disconnect
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Balance Card */}
       <Card className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 shadow-lg">

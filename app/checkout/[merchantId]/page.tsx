@@ -1,14 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Wallet, CheckCircle, Clock, Copy } from "lucide-react"
+import { Wallet, CheckCircle, Clock, Copy, AlertCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import stellarWalletService from "@/lib/stellar-wallet"
 
 interface CheckoutData {
   merchantName: string
@@ -22,6 +23,8 @@ export default function CheckoutPage() {
   const { toast } = useToast()
   const [selectedToken, setSelectedToken] = useState("XLM")
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "waiting" | "processing" | "completed">("idle")
+  const [walletConnected, setWalletConnected] = useState(false)
+  const [isConnecting, setIsConnecting] = useState(false)
   const [checkoutData] = useState<CheckoutData>({
     merchantName: "Demo Store",
     amount: 25.99,
@@ -43,11 +46,70 @@ export default function CheckoutPage() {
     return (checkoutData.amount / rate).toFixed(6)
   }
 
-  const handlePayment = () => {
+  useEffect(() => {
+    // Check if wallet is already connected
+    setWalletConnected(stellarWalletService.isConnected())
+  }, [])
+
+  const handleConnectWallet = async () => {
+    setIsConnecting(true)
+    try {
+      await stellarWalletService.connectWallet()
+      setWalletConnected(true)
+      toast({
+        title: "Wallet Connected",
+        description: "Your Stellar wallet is now connected",
+      })
+    } catch (error) {
+      toast({
+        title: "Connection Failed",
+        description: error instanceof Error ? error.message : "Failed to connect wallet",
+        variant: "destructive",
+      })
+    } finally {
+      setIsConnecting(false)
+    }
+  }
+
+  const handlePayment = async () => {
+    if (!walletConnected) {
+      toast({
+        title: "Wallet Required",
+        description: "Please connect your wallet first",
+        variant: "destructive",
+      })
+      return
+    }
+
     setPaymentStatus("waiting")
 
-    // Simulate payment flow
-    setTimeout(() => {
+    try {
+      // In a real implementation, you would:
+      // 1. Create a Stellar transaction
+      // 2. Sign it with the wallet
+      // 3. Submit to the network
+      
+      // For now, simulate the payment flow
+      setTimeout(() => {
+        setPaymentStatus("processing")
+      }, 2000)
+
+      setTimeout(() => {
+        setPaymentStatus("completed")
+        toast({
+          title: "Payment Successful",
+          description: "Your payment has been processed successfully",
+        })
+      }, 5000)
+    } catch (error) {
+      setPaymentStatus("idle")
+      toast({
+        title: "Payment Failed",
+        description: error instanceof Error ? error.message : "Payment failed",
+        variant: "destructive",
+      })
+    }
+  }
       setPaymentStatus("processing")
     }, 3000)
 
