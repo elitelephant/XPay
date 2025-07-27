@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { LayoutDashboard, Settings, Wallet, LogOut, Menu, X } from "lucide-react"
+import stellarWalletService from "@/lib/stellar-wallet"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -16,19 +17,38 @@ export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [merchantEmail, setMerchantEmail] = useState("")
+  const [walletConnected, setWalletConnected] = useState(false)
+  const [walletPublicKey, setWalletPublicKey] = useState<string | null>(null)
 
   useEffect(() => {
-    const email = localStorage.getItem("merchantEmail")
-    if (email) {
-      setMerchantEmail(email)
+    // Check wallet connection status
+    const checkWalletConnection = () => {
+      const isConnected = stellarWalletService.isConnected()
+      const publicKey = stellarWalletService.getPublicKey()
+      
+      setWalletConnected(isConnected)
+      setWalletPublicKey(publicKey)
     }
+
+    checkWalletConnection()
+    
+    // Check for wallet connection changes
+    const interval = setInterval(checkWalletConnection, 1000)
+    
+    return () => clearInterval(interval)
   }, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated")
-    localStorage.removeItem("merchantEmail")
-    router.push("/login")
+  const handleDisconnectWallet = async () => {
+    try {
+      await stellarWalletService.disconnectWallet()
+      setWalletConnected(false)
+      setWalletPublicKey(null)
+      localStorage.removeItem("isAuthenticated")
+      localStorage.removeItem("merchantEmail")
+      router.push("/login")
+    } catch (error) {
+      console.error("Failed to disconnect wallet:", error)
+    }
   }
 
   const isLoginPage = pathname === "/login"
@@ -105,22 +125,34 @@ export function Sidebar() {
           <div className="border-t border-slate-200 p-4">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">{merchantEmail.charAt(0).toUpperCase()}</span>
+                <Wallet className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-900 truncate">{merchantEmail || "Usuario"}</p>
-                <p className="text-xs text-slate-500">Comerciante</p>
+                {walletConnected && walletPublicKey ? (
+                  <>
+                    <p className="text-sm font-medium text-slate-900 truncate">
+                      {stellarWalletService.formatPublicKey(walletPublicKey)}
+                    </p>
+                    <p className="text-xs text-slate-500">Wallet Connected</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium text-slate-900 truncate">No Wallet</p>
+                    <p className="text-xs text-slate-500">Disconnected</p>
+                  </>
+                )}
               </div>
             </div>
 
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleLogout}
+              onClick={handleDisconnectWallet}
               className="w-full justify-start text-slate-600 hover:text-slate-900"
+              disabled={!walletConnected}
             >
               <LogOut className="w-4 h-4 mr-2" />
-              Cerrar Sesión
+              Disconnect Wallet
             </Button>
           </div>
         </div>
