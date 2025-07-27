@@ -9,6 +9,7 @@
 
 # production
 /build
+/dist
 
 # debug
 npm-debug.log*
@@ -18,6 +19,10 @@ yarn-error.log*
 
 # env files
 .env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # vercel
 .vercel
@@ -25,3 +30,29 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lock files (keep only one type)
+package-lock.json  # using pnpm-lock.yaml instead
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# temporary files
+*_temp.*
+*_backup.*
+*_clean.*
+*_new.*
+*_old.*
