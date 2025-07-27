@@ -135,34 +135,6 @@ export default function LoginPage() {
                   )}
                 </Button>
 
-                <div className="relative">
-                  <Separator />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="px-3 bg-white text-sm text-slate-500">
-                      Supported Wallets
-                    </span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-center text-sm text-slate-600">
-                  <div className="p-3 border border-slate-200 rounded-lg bg-white/50">
-                    <strong>Freighter</strong>
-                    <p className="text-xs">Browser Extension</p>
-                  </div>
-                  <div className="p-3 border border-slate-200 rounded-lg bg-white/50">
-                    <strong>LOBSTR</strong>
-                    <p className="text-xs">Mobile & Web</p>
-                  </div>
-                  <div className="p-3 border border-slate-200 rounded-lg bg-white/50">
-                    <strong>Rabet</strong>
-                    <p className="text-xs">Browser Extension</p>
-                  </div>
-                  <div className="p-3 border border-slate-200 rounded-lg bg-white/50">
-                    <strong>xBull</strong>
-                    <p className="text-xs">Browser Extension</p>
-                  </div>
-                </div>
-
                 <p className="text-xs text-center text-slate-500">
                   By connecting, you agree to our Terms of Service and Privacy Policy
                 </p>
