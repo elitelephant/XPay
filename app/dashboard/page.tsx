@@ -69,6 +69,32 @@ export default function DashboardPage() {
     }
   }, [router])
 
+  // Monitor wallet connection status in real-time
+  useEffect(() => {
+    const checkWalletConnection = () => {
+      const isWalletConnected = stellarWalletService.isConnected()
+      const publicKey = stellarWalletService.getPublicKey()
+      
+      setWalletConnected(isWalletConnected)
+      setWalletPublicKey(publicKey)
+      
+      // If wallet is disconnected and no traditional auth, redirect to login
+      const isAuth = localStorage.getItem("isAuthenticated")
+      if (!isWalletConnected && !isAuth) {
+        toast.error("Wallet disconnected. Please login again.")
+        router.push("/login")
+      }
+    }
+
+    // Check immediately
+    checkWalletConnection()
+    
+    // Check every 2 seconds for wallet connection changes
+    const interval = setInterval(checkWalletConnection, 2000)
+    
+    return () => clearInterval(interval)
+  }, [router])
+
   const handleDisconnectWallet = async () => {
     try {
       await stellarWalletService.disconnectWallet()

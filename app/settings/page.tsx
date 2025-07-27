@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator"
 import { Settings, Save, Copy, ExternalLink } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import stellarWalletService from "@/lib/stellar-wallet"
 
 export default function SettingsPage() {
   const [preferredToken, setPreferredToken] = useState("USDC")
@@ -24,10 +25,13 @@ export default function SettingsPage() {
   const checkoutUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/checkout/demo-merchant`
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication - support both old email auth and new wallet auth
     const isAuth = localStorage.getItem("isAuthenticated")
-    if (!isAuth) {
+    const isWalletConnected = localStorage.getItem("stellar_wallet_connected") === "true"
+    
+    if (!isAuth && !isWalletConnected) {
       router.push("/login")
+      return
     }
 
     // Load saved settings
@@ -40,6 +44,32 @@ export default function SettingsPage() {
       setMerchantName(settings.merchantName || "Mi Comercio")
     }
   }, [router])
+
+  // Monitor wallet connection status in real-time
+  useEffect(() => {
+    const checkWalletConnection = () => {
+      const isWalletConnected = stellarWalletService.isConnected()
+      
+      // If wallet is disconnected and no traditional auth, redirect to login
+      const isAuth = localStorage.getItem("isAuthenticated")
+      if (!isWalletConnected && !isAuth) {
+        toast({
+          title: "Session Expired",
+          description: "Wallet disconnected. Please login again.",
+          variant: "destructive",
+        })
+        router.push("/login")
+      }
+    }
+
+    // Check immediately
+    checkWalletConnection()
+    
+    // Check every 2 seconds for wallet connection changes
+    const interval = setInterval(checkWalletConnection, 2000)
+    
+    return () => clearInterval(interval)
+  }, [router, toast])
 
   const handleSave = async () => {
     setIsLoading(true)
