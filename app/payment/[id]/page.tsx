@@ -76,7 +76,7 @@ export default function PaymentDetailPage() {
 
     return (
       <Badge variant="outline" className={variants[status as keyof typeof variants]}>
-        {status === "completed" ? "Completado" : status === "pending" ? "Pendiente" : "Convirtiendo"}
+        {status === "completed" ? "Completed" : status === "pending" ? "Pending" : "Converting"}
       </Badge>
     )
   }
@@ -221,10 +221,10 @@ export default function PaymentDetailPage() {
                 <div className="p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 text-blue-600 shrink-0" />
-                    <span className="text-sm font-medium text-blue-800">Conversión en Progreso</span>
+                    <span className="text-sm font-medium text-blue-800">Conversion in Progress</span>
                   </div>
                   <p className="text-xs sm:text-sm text-blue-700 mt-1">
-                    El pago está siendo convertido a tu token preferido. Esto puede tomar unos minutos.
+                    The payment is being converted to your preferred token. This may take a few minutes.
                   </p>
                 </div>
               )}
@@ -233,10 +233,10 @@ export default function PaymentDetailPage() {
                 <div className="p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
-                    <span className="text-sm font-medium text-green-800">Pago Completado</span>
+                    <span className="text-sm font-medium text-green-800">Payment Completed</span>
                   </div>
                   <p className="text-xs sm:text-sm text-green-700 mt-1">
-                    El pago ha sido procesado exitosamente y agregado a tu saldo.
+                    Payment has been processed successfully and added to your balance.
                   </p>
                 </div>
               )}

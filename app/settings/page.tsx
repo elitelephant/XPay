@@ -17,7 +17,7 @@ export default function SettingsPage() {
   const [preferredToken, setPreferredToken] = useState("USDC")
   const [autoConvert, setAutoConvert] = useState(true)
   const [webhookUrl, setWebhookUrl] = useState("")
-  const [merchantName, setMerchantName] = useState("Mi Comercio")
+  const [merchantName, setMerchantName] = useState("My Business")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -41,7 +41,7 @@ export default function SettingsPage() {
       setPreferredToken(settings.preferredToken || "USDC")
       setAutoConvert(settings.autoConvert ?? true)
       setWebhookUrl(settings.webhookUrl || "")
-      setMerchantName(settings.merchantName || "Mi Comercio")
+      setMerchantName(settings.merchantName || "My Business")
     }
   }, [router])
 
@@ -105,8 +105,8 @@ export default function SettingsPage() {
     <div className="space-y-6 sm:space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Configuración</h1>
-        <p className="text-slate-600 text-sm sm:text-base">Personaliza las preferencias de tu comercio</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Settings</h1>
+        <p className="text-slate-600 text-sm sm:text-base">Customize your business preferences</p>
       </div>
 
       {/* Payment Settings */}
@@ -114,9 +114,9 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <Settings className="w-5 h-5" />
-            Configuración de Pagos
+            Payment Settings
           </CardTitle>
-          <CardDescription className="text-sm sm:text-base">Define cómo quieres recibir y procesar los pagos</CardDescription>
+          <CardDescription className="text-sm sm:text-base">Define how you want to receive and process payments</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -133,11 +133,11 @@ export default function SettingsPage() {
                   <SelectItem value="yXLM">yXLM</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs sm:text-sm text-slate-500">Los pagos se convertirán automáticamente a este token</p>
+              <p className="text-xs sm:text-sm text-slate-500">Payments will be automatically converted to this token</p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="merchant-name" className="text-sm sm:text-base font-medium">Nombre del Comercio</Label>
+              <Label htmlFor="merchant-name" className="text-sm sm:text-base font-medium">Business Name</Label>
               <Input
                 id="merchant-name"
                 value={merchantName}
@@ -153,8 +153,8 @@ export default function SettingsPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div className="space-y-1">
-              <Label className="text-sm sm:text-base font-medium">Conversión Automática</Label>
-              <p className="text-xs sm:text-sm text-slate-500">Convierte automáticamente todos los pagos al token preferido</p>
+              <Label className="text-sm sm:text-base font-medium">Auto Conversion</Label>
+              <p className="text-xs sm:text-sm text-slate-500">Automatically convert all payments to preferred token</p>
             </div>
             <Switch checked={autoConvert} onCheckedChange={setAutoConvert} className="self-start sm:self-auto" />
           </div>
@@ -171,7 +171,7 @@ export default function SettingsPage() {
               type="url"
               className="h-10 sm:h-11 text-sm sm:text-base"
             />
-            <p className="text-xs sm:text-sm text-slate-500">Recibe notificaciones de pagos en tiempo real</p>
+            <p className="text-xs sm:text-sm text-slate-500">Receive real-time payment notifications</p>
           </div>
         </CardContent>
       </Card>
@@ -180,7 +180,7 @@ export default function SettingsPage() {
       <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl">URL de Checkout</CardTitle>
-          <CardDescription className="text-sm sm:text-base">Comparte esta URL con tus clientes para recibir pagos</CardDescription>
+          <CardDescription className="text-sm sm:text-base">Share this URL with your customers to receive payments</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
@@ -209,7 +209,7 @@ export default function SettingsPage() {
           className="w-full sm:w-auto h-11 sm:h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-sm sm:text-base"
         >
           <Save className="w-4 h-4 mr-2" />
-          {isLoading ? "Guardando..." : "Guardar Configuración"}
+          {isLoading ? "Saving..." : "Save Settings"}
         </Button>
       </div>
     </div>
